@@ -1,0 +1,7 @@
+*.pyc
+*.project
+*.pydevproject
+*__py_cache__*
+*~
+*.idea*
+
