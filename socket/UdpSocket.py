@@ -1,4 +1,5 @@
 import socket
+import zlib
 
 
 class UdpSocket:
@@ -11,14 +12,19 @@ class UdpSocket:
         return self.udp_socket
 
     def send_data(self, data):
+        data = self.compress_data(self.encode_data(data))
         self.get_socket().sendto(data, (self.target_host, self.target_port))
 
-    def get_response(self):
-        data, addr = self.get_socket().recvfrom(4096)
-        return data, addr
+    def encode_data(self,data):
+        data = str.encode(data)
+        return data
+
+    def compress_data(self, data):
+        return zlib.compress(data)
 
 
 client = UdpSocket()
-message = "test"
-client.send_data(str.encode(message))
+message = "test hjfwejhafb" \
+          "jfnewfjkhq"
+client.send_data(message)
 print(client.get_response())
