@@ -21,5 +21,5 @@ class Client:
         pass
 
     def setup_socket(self,conf:dict):
-        #returns socket
+        #returns socketl
         pass
