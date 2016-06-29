@@ -21,3 +21,5 @@ Also make sure that switches are on in config.ini
 * openCv
 * python Crypto (sudo apt-get install python3-crypto)
 
+## Trello board with info of what is going on:
+https://trello.com/b/ZxRjPN2B/pythonvideostream
