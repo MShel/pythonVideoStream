@@ -1,0 +1,38 @@
+from compression.compressor import Compressor
+from encryption.encryptor import Encryptor
+
+
+class AbstractTransport:
+    def __init__(self):
+        self.compressor = None
+        self.encryptor = None
+
+    def encrypt_data(self, data):
+        result = data.encode()
+        if self.encryptor is not None:
+            result = self.encryptor.encrypt(data)
+        return result
+
+    def decrypt_data(self, data):
+        result = data
+        if self.encryptor is not None:
+            result = self.encryptor.decrypt(data)
+        return result
+
+    def compress_data(self, data):
+        result = data
+        if self.compressor is not None:
+            result = self.compressor.compress(data)
+        return result
+
+    def uncompress_data(self, data):
+        result = data
+        if self.compressor is not None:
+            result = self.compressor.uncompress(data)
+        return result
+
+    def add_compression(self, compressor: Compressor):
+        self.compressor = compressor
+
+    def add_encryption(self, encryptor: Encryptor):
+        self.encryptor = encryptor
