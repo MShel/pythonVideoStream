@@ -7,7 +7,6 @@ from config.config import Config
 from compression.compressor import Compressor
 from transport.client.UdpSocket import UdpSocket
 from encryption.encryptor import Encryptor
-from pprint import pprint
 
 sys.path.insert(0, os.getcwd())
 

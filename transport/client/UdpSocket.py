@@ -1,5 +1,4 @@
 import socket
-import zlib
 
 from transport.AbstractTransport import AbstractTransport
 
