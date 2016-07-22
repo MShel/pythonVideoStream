@@ -2,6 +2,7 @@ import socket
 
 from transport.AbstractTransport import AbstractTransport
 import base64
+from asyncio import coroutine
 
 class UdpSocket(AbstractTransport):
     def __init__(self, config: dict):
@@ -41,9 +42,10 @@ class UdpSocket(AbstractTransport):
         decompressed = self.uncompress_data(self.result_file)
         # data = self.decrypt_data(decompressed)
         print('len ' + str(len(decompressed)))
-        base64_decoded = (base64.b64decode(decompressed))
-        with open('testimg.jpg','wb') as holder:
-            holder.write(base64_decoded)
+        #base64_decoded = (base64.b64decode(decompressed))
+        #with open('testimg.jpg','wb') as holder:
+        #    holder.write(base64_decoded)
         # print('\n' + data + '\n')
         # print('Received %s ' % str((data, addr)))
         self.get_socket().sendto('got it'.encode(), addr)
+        return decompressed
