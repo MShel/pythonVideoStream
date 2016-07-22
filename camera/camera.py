@@ -1,11 +1,13 @@
 import base64
 import os
-#from cv2 import *
+
+
+# from cv2 import *
 
 
 class Camera:
     def __init__(self, config_obj: dict):
-        #self.camera = VideoCapture(0)
+        # self.camera = VideoCapture(0)
         self.config = config_obj
 
     def get_image(self):
@@ -17,9 +19,9 @@ class Camera:
             os.remove('/tmp/buffer.jpg')
             return base64.b64encode(img)
         else:
-            raise Error()
+            raise ConnectionError('Failed taking image with cv2')
 
     def get_test_image(self):
-        with open(os.getcwd()+'/camera/test.jpeg','rb') as test_img:
+        with open(os.getcwd() + '/camera/test.jpeg', 'rb') as test_img:
             test = test_img.read()
         return base64.b64encode(test)
