@@ -5,7 +5,6 @@ from Crypto.PublicKey import RSA
 
 
 class Encryptor:
-
     def __init__(self, config: dict):
         self.public_key_path = os.getcwd() + '/encryption/rsa/public_key.pem'
         self.private_key_path = os.getcwd() + '/encryption/rsa/private_key.pem'
@@ -22,10 +21,19 @@ class Encryptor:
         while offset < len(data):
             chunk = data[offset:offset + self.chunk_size]
             if len(chunk) % self.chunk_size != 0:
-                chunk += " " * (self.chunk_size - len(chunk))
-            print('0enc length ' + str(len(chunk)))
+                try:
+                    chunk += " " * (self.chunk_size - len(chunk))
+                except TypeError:
+                    chunk = chunk.decode()
+                    chunk += " " * (self.chunk_size - len(chunk))
+                print('0enc length ' + str(len(chunk)))
 
-            bin_chunk = chunk.encode()
+            try:
+                bin_chunk = chunk.encode()
+            except AttributeError:
+                # chunk is already here
+                bin_chunk = chunk
+
             print('1enc length ' + str(len(bin_chunk)))
 
             encrypted_chunk = oaep_encryptor.encrypt(bin_chunk)
@@ -33,9 +41,10 @@ class Encryptor:
 
             encrypted += encrypted_chunk
             offset += self.chunk_size
+
         return encrypted
 
-    def decrypt(self,data):
+    def decrypt(self, data):
         print('\n ...decrypting... \n')
         priv_key_file = open(self.private_key_path, 'rb')
         rsa_key = RSA.importKey(priv_key_file.read().decode())

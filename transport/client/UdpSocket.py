@@ -19,6 +19,8 @@ class UdpSocket(AbstractTransport):
         data = self.encrypt_data(data)
         print('sending ' + str(len(data)))
         data = self.compress_data(data)
+        print('compressed ' + str(len(data)))
+
         self.get_socket().sendto(data, (self.target_host, self.target_port))
         print(self.get_response())
 
