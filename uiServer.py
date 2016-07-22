@@ -2,11 +2,13 @@
 import os
 import subprocess
 import sys
-from config.config import Config
+
 from compression.compressor import Compressor
-from transport.client.UdpSocket import UdpSocket
-#from encryption.encryptor import Encryptor
-from camera.camera import Camera
+from transport.server.UdpSocket import UdpSocket
+from encryption.encryptor import Encryptor
+from config.config import Config
+
+
 sys.path.insert(0, os.getcwd())
 
 
@@ -16,7 +18,6 @@ def main():
     subprocess.call('clear', shell=True)
     config_object = Config(os.getcwd() + '/config/config.ini').raw_config_object
     transport = UdpSocket(config_object)
-    camera = Camera(config_object)
 
     if config_object['COMPRESSION']['switch'] == 'On':
         compressor = Compressor(config_object)
@@ -25,13 +26,14 @@ def main():
     if config_object['ENCRYPTION']['switch'] == 'On':
         #encryptor = Encryptor(config_object)
         #transport.add_encryption(encryptor)
-        pass
-
+        print("test")
     try:
-        # while True:
-        image = camera.get_test_image()
-        print(image)
-        transport.send_data(image)
+        while True:
+            '''
+            do stuff
+            '''
+            transport.handle_client()
+            print('\nPrint ... Server running \n')
 
     except LookupError as e:
         print(e)

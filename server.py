@@ -5,7 +5,7 @@ import sys
 
 from compression.compressor import Compressor
 from transport.server.UdpSocket import UdpSocket
-from encryption.encryptor import Encryptor
+#from encryption.encryptor import Encryptor
 from config.config import Config
 
 

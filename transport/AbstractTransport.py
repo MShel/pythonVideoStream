@@ -1,5 +1,5 @@
 from compression.compressor import Compressor
-from encryption.encryptor import Encryptor
+#from encryption.encryptor import Encryptor
 
 
 class AbstractTransport:
@@ -39,5 +39,5 @@ class AbstractTransport:
     def add_compression(self, compressor: Compressor):
         self.compressor = compressor
 
-    def add_encryption(self, encryptor: Encryptor):
-        self.encryptor = encryptor
+    #def add_encryption(self, encryptor: Encryptor):
+    #    self.encryptor = encryptor
