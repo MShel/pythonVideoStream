@@ -24,9 +24,9 @@ def main():
         transport.add_compression(compressor)
 
     if config_object['ENCRYPTION']['switch'] == 'On':
-        encryptor = Encryptor(config_object)
-        transport.add_encryption(encryptor)
-
+        #encryptor = Encryptor(config_object)
+        #transport.add_encryption(encryptor)
+        print("test")
     try:
         while True:
             '''
