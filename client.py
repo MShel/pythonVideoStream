@@ -7,7 +7,7 @@ from config.config import Config
 from compression.compressor import Compressor
 from transport.client.UdpSocket import UdpSocket
 from encryption.encryptor import Encryptor
-
+from camera.camera import Camera
 sys.path.insert(0, os.getcwd())
 
 
@@ -17,18 +17,22 @@ def main():
     subprocess.call('clear', shell=True)
     config_object = Config(os.getcwd() + '/config/config.ini').raw_config_object
     transport = UdpSocket(config_object)
+    camera = Camera(config_object)
 
     if config_object['COMPRESSION']['switch'] == 'On':
         compressor = Compressor(config_object)
         transport.add_compression(compressor)
 
     if config_object['ENCRYPTION']['switch'] == 'On':
-        encryptor = Encryptor(config_object)
-        transport.add_encryption(encryptor)
-
+        #encryptor = Encryptor(config_object)
+        #transport.add_encryption(encryptor)
+        pass
 
     try:
-        transport.send_data("ATATA")
+        # while True:
+        image = camera.get_image()
+        #print(image)
+        transport.send_data(image)
 
     except LookupError as e:
         print(e)

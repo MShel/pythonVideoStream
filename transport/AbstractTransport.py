@@ -8,7 +8,12 @@ class AbstractTransport:
         self.encryptor = None
 
     def encrypt_data(self, data):
-        result = data.encode()
+        try:
+            result = data.encode()
+        except AttributeError:
+            # got binary already
+            result = data
+
         if self.encryptor is not None:
             result = self.encryptor.encrypt(data)
         return result
