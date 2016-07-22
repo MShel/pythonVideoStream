@@ -17,7 +17,7 @@ class UdpSocket(AbstractTransport):
         return self.udp_socket
 
     def handle_client(self):
-        data, addr = self.get_socket().recvfrom(1024)
+        data, addr = self.get_socket().recvfrom(49152)
         decompressed = self.uncompress_data(data)
         data = self.decrypt_data(decompressed)
         print('len7' + str(len(data)))
