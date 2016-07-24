@@ -9,6 +9,7 @@ class UdpSocket(AbstractTransport):
         self.target_host = config['TRANSPORT']['server_address']
         self.target_port = int(config['TRANSPORT']['port'])
         self.udp_socket = None
+        self.buffer = self.get_socket().getsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF)
 
     def get_socket(self) -> socket:
         if self.udp_socket is None:
@@ -21,8 +22,7 @@ class UdpSocket(AbstractTransport):
         data = self.compress_data(data)
         print('compressed ' + str(len(data)))
         self.send_sentinel_start()
-        buffer = self.get_socket().getsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF)
-        self.send_chunked_data(data, buffer)
+        self.send_chunked_data(data)
         self.send_sentinel_end()
         print(self.get_response())
 
@@ -30,26 +30,27 @@ class UdpSocket(AbstractTransport):
         data, addr = self.get_socket().recvfrom(1024)
         return data.decode('utf-8')
 
-    def send_chunked_data(self, data, buffer):
+    def send_chunked_data(self, data):
         try:
             offset = 0
             while offset < len(data):
-                chunk = data[offset:offset + buffer]
-                if len(chunk) % buffer != 0:
+                chunk = data[offset:offset + self.buffer]
+                if len(chunk) % self.buffer != 0:
                     try:
-                        chunk += " " * (buffer - len(chunk))
+                        chunk += " " * (self.buffer - len(chunk))
                     except TypeError:
-                        chunk += " ".encode() * (buffer - len(chunk))
+                        chunk += " ".encode() * (self.buffer - len(chunk))
                 try:
                     bin_chunk = chunk.encode()
                 except AttributeError:
                     bin_chunk = chunk
 
-                offset += buffer
+                offset += self.buffer
                 self.get_socket().sendto(bin_chunk, (self.target_host, self.target_port))
         except OSError:
-            buffer -= 1024
-            self.send_chunked_data(data, buffer)
+            self.buffer -= 1024
+            self.send_chunked_data(data)
+
         print('Sent!')
 
     def send_sentinel_start(self):
