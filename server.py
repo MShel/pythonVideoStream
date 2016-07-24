@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 import os
 import subprocess
-import sys
 
 from compression.compressor import Compressor
 from transport.server.UdpSocket import UdpSocket
+
 # from encryption.encryptor import Encryptor
 from config.config import Config
 from queue import Queue
@@ -36,7 +36,7 @@ def main():
         receiver_thread = Thread(target=spin_server, args=(image_queue, transport))
         receiver_thread.start()
 
-        ui_thread = Thread(target=spin_ui_server, args=(image_queue,))
+        ui_thread = Thread(target=spin_ui_server, args=(image_queue, config_object))
         ui_thread.start()
 
     except LookupError as e:
@@ -67,8 +67,9 @@ class MyServer(BaseHTTPRequestHandler):
         while True and b64image is None:
             b64image = self.queue.get()
 
-        self.wfile.write('<html><head>')
-        self.wfile.write('<meta http-equiv="refresh" content="1">') #refrsesh the page every 2'd to check for new pictures...
+        self.wfile.write('<html><head>'.encode())
+        self.wfile.write(
+            '<meta http-equiv="refresh" content="0.5">'.encode())  # refresh the page every 2'd to check for new pictures...
         self.wfile.write('</head><body>'.encode())
         self.wfile.write('<img src="data:image/jpeg;base64,'.encode())
         self.wfile.write(b64image)
@@ -79,8 +80,8 @@ class MyServer(BaseHTTPRequestHandler):
         self.queue = queue
 
 
-def spin_ui_server(image_queue):
-    my_server = HTTPServer(("127.0.0.1", 9999), MyServer)
+def spin_ui_server(image_queue, config_object:dict):
+    my_server = HTTPServer((config_object['TRANSPORT']['server_address'], int(config_object['TRANSPORT']['ui_port'])), MyServer)
     my_server.RequestHandlerClass.set_queue(MyServer, image_queue)
     my_server.handle_request()
     my_server.serve_forever()
