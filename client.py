@@ -8,8 +8,7 @@ from transport.client.UdpSocket import UdpSocket
 #from encryption.encryptor import Encryptor
 from camera.camera import Camera
 sys.path.insert(0, os.getcwd())
-
-
+import  time
 # Get the args
 def main():
     # Clear the screen
@@ -28,10 +27,10 @@ def main():
         pass
 
     try:
-        # while True:
-        image = camera.get_test_image()
-        print(image)
-        transport.send_data(image)
+        while True:
+            time.sleep(float(config_object['QUALITY']['delay']))
+            image = camera.get_frame()
+            transport.send_data(image)
 
     except LookupError as e:
         print(e)
