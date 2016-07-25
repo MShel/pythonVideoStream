@@ -26,7 +26,7 @@ class Camera:
             if self.failure_counter < self.MAX_PHOTO_FAILURE_ATTEMPTS:
                 self.failure_counter += 1
                 self.get_frame()
-
+            # TODO need to add else raise Error(photo taking failed... and camera close)
     def get_test_image(self):
         with open(os.getcwd() + '/camera/test.jpeg', 'rb') as test_img:
             test = test_img.read()
