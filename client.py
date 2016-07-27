@@ -2,14 +2,18 @@
 import os
 import subprocess
 import sys
-from config.config import Config
+
 from compression.compressor import Compressor
+from config.config import Config
 from transport.client.UdpSocket import UdpSocket
-#from encryption.encryptor import Encryptor
+
+# from encryption.encryptor import Encryptor
 from camera.camera import Camera
+
 sys.path.insert(0, os.getcwd())
-import  time
-# Get the args
+import time
+
+
 def main():
     # Clear the screen
     subprocess.call('clear', shell=True)
@@ -22,8 +26,8 @@ def main():
         transport.add_compression(compressor)
 
     if config_object['ENCRYPTION']['switch'] == 'On':
-        #encryptor = Encryptor(config_object)
-        #transport.add_encryption(encryptor)
+        # encryptor = Encryptor(config_object)
+        # transport.add_encryption(encryptor)
         pass
 
     try:

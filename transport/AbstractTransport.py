@@ -32,8 +32,11 @@ class AbstractTransport:
 
     def uncompress_data(self, data):
         result = data
+        print(data)
         if self.compressor is not None:
             result = self.compressor.uncompress(data)
+        print('test')
+        print(data)
         return result
 
     def add_compression(self, compressor: Compressor):

@@ -1,8 +1,7 @@
 import socket
 
 from transport.AbstractTransport import AbstractTransport
-import base64
-from asyncio import coroutine
+
 
 class UdpSocket(AbstractTransport):
     def __init__(self, config: dict):
@@ -10,7 +9,7 @@ class UdpSocket(AbstractTransport):
         self.bind_host = config['TRANSPORT']['server_address']
         self.bind_port = int(config['TRANSPORT']['port'])
         self.udp_socket = None
-        self.result_file = ''.encode()
+        self.result_file = None
 
     def get_socket(self):
         if self.udp_socket is None:
@@ -26,24 +25,27 @@ class UdpSocket(AbstractTransport):
         except UnicodeDecodeError:
             sentinel_start = None
 
-        if not self.result_file or sentinel_start == "message start":
+        if self.result_file is None or sentinel_start == "message start":
             self.result_file = ''.encode()
+        else:
 
-        try:
-            print(len(self.result_file))
-            sentinel_end = data.decode()
-            if sentinel_end == "message end":
-                return self.return_received(addr)
-        except UnicodeDecodeError:
-            self.result_file += data
+            try:
+                sentinel_end = data.decode()
+                if sentinel_end == "message end":
+                    return self.return_received(addr)
+                else:
+                    self.result_file += data
+            except (UnicodeDecodeError):
+                self.result_file += data
+            except AttributeError:
+                self.result_file += data.encode()
 
     def return_received(self, addr):
-        # print(self.result_file)
         decompressed = self.uncompress_data(self.result_file)
         # data = self.decrypt_data(decompressed)
         print('len ' + str(len(decompressed)))
-        #base64_decoded = (base64.b64decode(decompressed))
-        #with open('testimg.jpg','wb') as holder:
+        # base64_decoded = (base64.b64decode(decompressed))
+        # with open('testimg.jpg','wb') as holder:
         #    holder.write(base64_decoded)
         # print('\n' + data + '\n')
         # print('Received %s ' % str((data, addr)))
