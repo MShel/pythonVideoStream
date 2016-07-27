@@ -1,7 +1,8 @@
 import base64
 import os
-
 from cv2 import *
+import io
+from PIL import Image
 
 
 class Camera:
@@ -15,12 +16,10 @@ class Camera:
     def get_frame(self):
         rc, img = self.camera.read()
         if rc:
-            imwrite(self.config['FILES']['buffer_file'], img)
-            self.failure_counter = 0
-            with open(self.config['FILES']['buffer_file'], 'rb') as content_file:
-                img = content_file.read()
-            os.remove(self.config['FILES']['buffer_file'])
-            return base64.b64encode(img)
+            pil_image = Image.fromarray(img)
+            output = io.BytesIO()
+            pil_image.save(output, format='JPEG')
+            return base64.b64encode(output.getvalue())
         else:
             # trying again
             if self.failure_counter < self.MAX_PHOTO_FAILURE_ATTEMPTS:

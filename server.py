@@ -69,7 +69,7 @@ class MyServer(BaseHTTPRequestHandler):
 
         self.wfile.write('<html><head>'.encode())
         self.wfile.write(
-            '<meta http-equiv="refresh" content="0.5">'.encode())  # refresh the page every 2'd to check for new pictures...
+            '<meta http-equiv="refresh" content="0.005">'.encode())  # refresh the page every 2'd to check for new pictures...
         self.wfile.write('</head><body>'.encode())
         self.wfile.write('<img src="data:image/jpeg;base64,'.encode())
         self.wfile.write(b64image)

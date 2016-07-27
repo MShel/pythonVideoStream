@@ -9,4 +9,8 @@ class Compressor:
         return zlib.compress(data)
 
     def uncompress(self, data):
-        return zlib.decompress(data)
+        try:
+            result = zlib.decompress(data)
+        except zlib.error:
+            pass
+        return result
