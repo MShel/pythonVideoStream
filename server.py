@@ -60,21 +60,17 @@ def spin_server(queue: Queue, transport: AbstractTransport):
 class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
-        self.send_header("Content-type", "text/html")
+        self.send_header('Content-type', 'multipart/x-mixed-replace; boundary=--jpgboundary')
         self.end_headers()
-        b64image = None
 
-        while True and b64image is None:
-            b64image = self.queue.get()
-
-        self.wfile.write('<html><head>'.encode())
-        self.wfile.write(
-            '<meta http-equiv="refresh" content="0.005">'.encode())  # refresh the page every 2'd to check for new pictures...
-        self.wfile.write('</head><body>'.encode())
-        self.wfile.write('<img src="data:image/jpeg;base64,'.encode())
-        self.wfile.write(b64image)
-        self.wfile.write('"> </img>'.encode())
-        self.wfile.write('</body></html>'.encode())
+        while True:
+            bin_image = self.queue.get()
+            if bin_image is not None:
+                self.wfile.write("--jpgboundary".encode())
+                self.send_header('Content-type', 'image/jpeg')
+                self.send_header('Content-length', str(len(bin_image)))
+                self.end_headers()
+                self.wfile.write(bin_image)
 
     def set_queue(self, queue):
         self.queue = queue
