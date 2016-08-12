@@ -11,7 +11,6 @@ from autobahn.twisted.websocket import WebSocketServerFactory, \
 
 
 class BroadcastServerProtocol(WebSocketServerProtocol):
-
     def onOpen(self):
         self.factory.register(self)
 
@@ -26,7 +25,6 @@ class BroadcastServerProtocol(WebSocketServerProtocol):
 
 
 class BroadcastServerFactory(WebSocketServerFactory):
-
     """
     Simple broadcast server broadcasting any message it receives to all
     currently connected clients.
@@ -59,8 +57,11 @@ class BroadcastServerFactory(WebSocketServerFactory):
             c.sendMessage(msg.encode('utf8'))
             print("message sent to {}".format(c.peer))
 
-if __name__ == '__main__':
+    def getClientsCount(self):
+        return list.count(self.clients)
+    
 
+if __name__ == '__main__':
     log.startLogging(sys.stdout)
 
     ServerFactory = BroadcastServerFactory
