@@ -33,6 +33,7 @@ class Camera:
             if self.failure_counter < self.MAX_PHOTO_FAILURE_ATTEMPTS:
                 self.failure_counter += 1
                 self.get_frame()
+            # TODO need to add else raise Error(photo taking failed... and camera close)
 
     def compare_images(self, curr_image: Image) -> float:
         diff = ImageChops.difference(curr_image, self.prev_image)

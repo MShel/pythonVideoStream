@@ -12,14 +12,10 @@ To enable encryption you need to run keyGen.py to generate priv/public keys
 Also make sure that switches are on in config.ini
 
 ##How to run:
-* sudo python3 client.py (on the client side (where the camera is))
-* sudo python3 server.py (on the server side (where the web ui should be))
-
-## Things you need to run it
-* linux
-* python3
-* openCv
-* python Crypto (sudo apt-get install python3-crypto)
+* pip install -r requirements.txt
+* adjust config.ini
+* on the server python server.py
+* on the client python client.py
 
 ## Trello board with info of what is going on:
 https://trello.com/b/ZxRjPN2B/pythonvideostream
